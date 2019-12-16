@@ -7,7 +7,7 @@
     <version>2.5.0</version>
     <url>http://maven.apache.org</url>
     <build>
-        <sourceDirectory>.</sourceDirectory>
+        <sourceDirectory>./src/main/java</sourceDirectory>
         <plugins>
             <plugin>
                 <groupId>org.apache.maven.plugins</groupId>
