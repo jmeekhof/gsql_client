@@ -11,10 +11,10 @@ repositories {
 }
 
 dependencies {
-    implementation("commons-cli:commons-cli:1.4")
-    implementation("jline:jline:2.11")
-    implementation("org.json:json:20180813")
-    implementation("javax.xml.bind:jaxb-api:2.3.1")
+    implementation("commons-cli:commons-cli:${Versions.commonsCli}")
+    implementation("jline:jline:${Versions.jline}")
+    implementation("org.json:json:${Versions.json}")
+    implementation("javax.xml.bind:jaxb-api:${Versions.jaxbApi}")
 }
 
 val projectGroup: String by project
