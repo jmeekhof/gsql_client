@@ -25,13 +25,6 @@ group = projectGroup
 version = projectVersion
 description = projectDescription
 
-java {
-    // withSourcesJar()
-    withJavadocJar()
-    sourceCompatibility = JavaVersion.VERSION_1_8
-    targetCompatibility = JavaVersion.VERSION_1_8
-}
-
 tasks.withType(Javadoc::class) {
     setFailOnError(false)
 }
