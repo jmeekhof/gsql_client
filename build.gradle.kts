@@ -1,6 +1,7 @@
 plugins {
     java
     `maven-publish`
+    checkstyle
 }
 
 repositories {
@@ -17,6 +18,17 @@ dependencies {
     implementation("javax.xml.bind:jaxb-api:${Versions.jaxbApi}")
 }
 
+java {
+    withSourcesJar()
+    withJavadocJar()
+    sourceCompatibility = JavaVersion.VERSION_1_8
+    targetCompatibility = JavaVersion.VERSION_1_8
+}
+
+checkstyle {
+    // maxWarnings = 0
+}
+
 val projectGroup: String by project
 val projectVersion: String by project
 val projectDescription: String by project
@@ -25,11 +37,19 @@ group = projectGroup
 version = projectVersion
 description = projectDescription
 
+tasks.withType<Checkstyle>().configureEach {
+    reports {
+        xml.isEnabled = true
+        html.isEnabled = true
+        html.stylesheet = resources.text.fromFile("config/xsl/checkstyle-noframes-severity-sorted.xsl")
+    }
+}
+
 tasks.withType(Javadoc::class) {
     setFailOnError(false)
 }
 
-val jar by tasks.getting(Jar::class) {
+tasks.withType<Jar> {
     manifest {
         attributes(
             "Main-Class" to "${projectGroup}.Driver",
@@ -45,6 +65,11 @@ val jar by tasks.getting(Jar::class) {
     })
 }
 
+tasks.withType<JavaCompile> {
+    options.encoding = "UTF-8"
+    // options.isWarnings = true
+}
+
 publishing {
     publications.withType<MavenPublication> {
     //    artifact(sourcesJar.get())
@@ -55,8 +80,4 @@ publishing {
         }
 
     }
-}
-
-tasks.withType<JavaCompile> {
-    options.encoding = "UTF-8"
 }
