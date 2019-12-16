@@ -1,5 +1,5 @@
 plugins {
-    id("java")
+    java
     `maven-publish`
 }
 
@@ -17,14 +17,39 @@ dependencies {
     implementation("javax.xml.bind:jaxb-api:2.3.1")
 }
 
-group = "com.tigergraph.client"
-version = "2.5.0"
-description = "Provides a command line interface for interacting with the Tigergraph server."
+val projectGroup: String by project
+val projectVersion: String by project
+val projectDescription: String by project
+
+group = projectGroup
+version = projectVersion
+description = projectDescription
 
 java {
-    withSourcesJar()
+    // withSourcesJar()
     withJavadocJar()
     sourceCompatibility = JavaVersion.VERSION_1_8
+    targetCompatibility = JavaVersion.VERSION_1_8
+}
+
+tasks.withType(Javadoc::class) {
+    setFailOnError(false)
+}
+
+val jar by tasks.getting(Jar::class) {
+    manifest {
+        attributes(
+            "Main-Class" to "${projectGroup}.Driver",
+            "Built-By" to System.getProperty("user.name"),
+            "Created-By" to "Gradle ${gradle.gradleVersion}",
+            "Build-Jdk" to JavaVersion.current()
+        )
+    }
+    from(sourceSets.main.get().output)
+    dependsOn(configurations.runtimeClasspath)
+    from({
+        configurations.runtimeClasspath.get().filter { it.name.endsWith("jar")}.map { zipTree(it)}
+    })
 }
 
 publishing {
